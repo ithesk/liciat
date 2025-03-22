@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_proposal_tree" model="ir.ui.view">
+        <field name="name">tender.proposal.tree</field>
+        <field name="model">tender.proposal</field>
+        <field name="arch" type="xml">
+            <tree string="Propuestas" sample="1" decoration-info="state == 'draft'" decoration-success="state in ('selected', 'awarded')" decoration-danger="state in ('rejected', 'canceled')">
+                <field name="name"/>
+                <field name="tender_id"/>
+                <field name="partner_id"/>
+                <field name="submission_date"/>
+                <field name="is_our_company"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="amount_total" sum="Total" widget="monetary"/>
+                <field name="score" avg="Media"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state in ('selected', 'awarded')" decoration-warning="state in ('submitted', 'in_review')" decoration-danger="state in ('rejected', 'canceled')"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_proposal_form" model="ir.ui.view">
+        <field name="name">tender.proposal.form</field>
+        <field name="model">tender.proposal</field>
+        <field name="arch" type="xml">
+            <form string="Propuesta">
+                <header>
+                    <button name="action_draft" string="Establecer como Borrador" type="object" invisible="state not in ('submitted','rejected','canceled')" groups="base.group_user"/>
+                    <button name="action_submit" string="Presentar" type="object" invisible="state != 'draft'" class="oe_highlight" groups="base.group_user"/>
+                    <button name="action_review" string="Poner en Revisión" type="object" invisible="state != 'submitted'" class="oe_highlight" groups="base.group_user"/>
+                    <button name="action_select" string="Seleccionar" type="object" invisible="state != 'in_review'" class="oe_highlight" groups="base.group_user"/>
+                    <button name="action_award" string="Adjudicar" type="object" invisible="state != 'selected'" class="oe_highlight" groups="base.group_user"/>
+                    <button name="action_reject" string="Rechazar" type="object" invisible="state not in ('submitted','in_review','selected')" groups="base.group_user"/>
+                    <button name="action_cancel" string="Cancelar" type="object" invisible="state not in ('draft','submitted')" groups="base.group_user"/>
+                    <button name="action_print_proposal" string="Imprimir Propuesta" type="object" class="btn-primary" invisible="state == 'draft'"/>
+                    <button name="action_generate_evaluation" string="Generar Evaluación" type="object" invisible="state not in ('submitted','in_review','selected')" groups="base.group_user"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,in_review,selected,awarded"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archivada" bg_color="bg-danger" invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="tender_id" domain="[('state', 'in', ['published', 'in_process', 'evaluation'])]"/>
+                            <field name="partner_id"/>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="submission_date"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                            <field name="is_our_company"/>
+                            <field name="score" widget="progressbar" invisible="not evaluation_ids"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Líneas de Propuesta" name="lines">
+                            <field name="line_ids" widget="section_and_note_one2many">
+                                <tree editable="bottom">
+                                    <control>
+                                        <create name="add_product_control" string="Añadir Producto"/>
+                                        <create name="add_section_control" string="Añadir Sección" context="{'default_display_type': 'line_section'}"/>
+                                        <create name="add_note_control" string="Añadir Nota" context="{'default_display_type': 'line_note'}"/>
+                                    </control>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="product_uom_id" options="{'no_open': True, 'no_create': True}"/>
+                                    <field name="price_unit" widget="monetary"/>
+                                    <field name="discount" groups="product.group_discount_per_so_line"/>
+                                    <field name="tax_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('type_tax_use','=','sale')]"/>
+                                    <field name="price_subtotal" sum="Subtotal" widget="monetary"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_untaxed" widget="monetary"/>
+                                <field name="amount_tax" widget="monetary"/>
+                                <div class="oe_subtotal_footer_separator oe_inline">
+                                    <label for="amount_total"/>
+                                </div>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary"/>
+                            </group>
+                        </page>
+                        <page string="Documentos Gubernamentales" name="government_docs">
+                            <group>
+                                <field name="bidding_data_id"/>
+                            </group>
+                            <field name="government_document_ids">
+                                <tree editable="bottom" decoration-danger="state == 'expired'" decoration-warning="state == 'pending_renewal'" decoration-success="state == 'valid'">
+                                    <field name="name"/>
+                                    <field name="document_type"/>
+                                    <field name="reference_number"/>
+                                    <field name="expiration_date"/>
+                                    <field name="state"/>
+                                    <field name="attachment_id" widget="binary"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Propuesta Técnica" name="technical">
+                            <field name="technical_proposal" placeholder="Describa su propuesta técnica aquí..."/>
+                        </page>
+                        <page string="Documentos" name="documents">
+                            <field name="attachment_ids" widget="many2many_binary" string="Documentos Adjuntos"/>
+                        </page>
+                        <page string="Evaluación" name="evaluation" invisible="not evaluation_ids">
+                            <field name="evaluation_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="weight"/>
+                                    <field name="score" widget="progressbar"/>
+                                    <field name="notes"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Términos y Condiciones" name="terms">
+                            <field name="terms" placeholder="Términos y condiciones de la propuesta..."/>
+                        </page>
+                        <page string="Notas" name="notes">
+                            <field name="note" placeholder="Notas internas sobre esta propuesta..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_proposal_kanban" model="ir.ui.view">
+        <field name="name">tender.proposal.kanban</field>
+        <field name="model">tender.proposal</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column" sample="1" record_draggable="1" group_create="false" group_delete="false">
+                <field name="name"/>
+                <field name="tender_id"/>
+                <field name="partner_id"/>
+                <field name="submission_date"/>
+                <field name="user_id"/>
+                <field name="currency_id"/>
+                <field name="amount_total"/>
+                <field name="state"/>
+                <field name="is_our_company"/>
+                <field name="score"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click oe_kanban_card 
+                            #{record.is_our_company.raw_value ? 'oe_kanban_color_3' : ''} 
+                            oe_kanban_color_#{record.color.raw_value}">
+                            <div class="oe_kanban_content">
+                                <div>
+                                    <strong><field name="name"/></strong>
+                                </div>
+                                <div>
+                                    <field name="tender_id"/>
+                                </div>
+                                <div>
+                                    <field name="partner_id"/>
+                                </div>
+                                <div class="oe_kanban_bottom_left">
+                                    <div t-if="record.score.raw_value > 0" t-attf-class="mt-2">
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" 
+                                                 t-attf-style="width: #{record.score.raw_value}%;" 
+                                                 t-att-aria-valuenow="record.score.raw_value" 
+                                                 aria-valuemin="0" aria-valuemax="100">
+                                                <span><field name="score"/> %</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="amount_total" widget="monetary"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <div t-if="record.is_our_company.raw_value">
+                                        <span class="badge badge-success">Nuestra</span>
+                                    </div>
+                                    <field name="user_id" widget="many2one_avatar_user"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_proposal_search" model="ir.ui.view">
+        <field name="name">tender.proposal.search</field>
+        <field name="model">tender.proposal</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Propuestas">
+                <field name="name" string="Propuesta" filter_domain="['|', '|', ('name', 'ilike', self), ('tender_id', 'ilike', self), ('partner_id', 'ilike', self)]"/>
+                <field name="tender_id"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <filter string="Mis Propuestas" name="my_proposals" domain="[('user_id', '=', uid)]"/>
+                <filter string="Propuestas Archivadas" name="inactive" domain="[('active', '=', False)]"/>
+                <filter string="Nuestras Propuestas" name="our_proposals" domain="[('is_our_company', '=', True)]"/>
+                <separator/>
+                <filter string="Borrador" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Presentada" name="submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="En Revisión" name="in_review" domain="[('state', '=', 'in_review')]"/>
+                <filter string="Seleccionada" name="selected" domain="[('state', '=', 'selected')]"/>
+                <filter string="Adjudicada" name="awarded" domain="[('state', '=', 'awarded')]"/>
+                <filter string="Rechazada" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <filter string="Cancelada" name="canceled" domain="[('state', '=', 'canceled')]"/>
+                <separator/>
+                <filter string="Presentación Reciente" name="recent_submission" 
+                        domain="[('submission_date', '&gt;=', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Agrupar Por">
+                    <filter string="Licitación" name="tender" context="{'group_by': 'tender_id'}"/>
+                    <filter string="Proveedor" name="partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Responsable" name="responsible" context="{'group_by': 'user_id'}"/>
+                    <filter string="Estado" name="state" context="{'group_by': 'state'}"/>
+                    <filter string="Mes de Presentación" name="submission_date" context="{'group_by': 'submission_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Calendar View -->
+    <record id="view_proposal_calendar" model="ir.ui.view">
+        <field name="name">tender.proposal.calendar</field>
+        <field name="model">tender.proposal</field>
+        <field name="arch" type="xml">
+            <calendar string="Propuestas" date_start="submission_date" mode="month" color="user_id">
+                <field name="name"/>
+                <field name="tender_id"/>
+                <field name="partner_id"/>
+                <field name="amount_total" widget="monetary"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Pivot View -->
+    <record id="view_proposal_pivot" model="ir.ui.view">
+        <field name="name">tender.proposal.pivot</field>
+        <field name="model">tender.proposal</field>
+        <field name="arch" type="xml">
+            <pivot string="Análisis de Propuestas" sample="1">
+                <field name="tender_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="amount_total" type="measure" widget="monetary"/>
+                <field name="score" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph View -->
+    <record id="view_proposal_graph" model="ir.ui.view">
+        <field name="name">tender.proposal.graph</field>
+        <field name="model">tender.proposal</field>
+        <field name="arch" type="xml">
+            <graph string="Análisis de Propuestas" sample="1">
+                <field name="tender_id"/>
+                <field name="amount_total" type="measure" widget="monetary"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Action for Our Proposals -->
+    <record id="action_our_proposals" model="ir.actions.act_window">
+        <field name="name">Nuestras Propuestas</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tender.proposal</field>
+        <field name="view_mode">kanban,tree,form,calendar,pivot,graph</field>
+        <field name="domain">[('is_our_company', '=', True)]</field>
+        <field name="context">{'search_default_my_proposals': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea tu primera propuesta
+            </p>
+            <p>
+                Las propuestas te permiten presentar ofertas a licitaciones.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action for All Proposals -->
+    <record id="action_proposal" model="ir.actions.act_window">
+        <field name="name">Propuestas</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tender.proposal</field>
+        <field name="view_mode">kanban,tree,form,calendar,pivot,graph</field>
+        <field name="search_view_id" ref="view_proposal_search"/>
+        <field name="context">{'search_default_my_proposals': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea tu primera propuesta
+            </p>
+            <p>
+                Las propuestas te permiten presentar ofertas a licitaciones.
+            </p>
+        </field>
+    </record>
+</odoo>

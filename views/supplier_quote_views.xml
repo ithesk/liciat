@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_supplier_quote_tree" model="ir.ui.view">
+        <field name="name">supplier.quote.tree</field>
+        <field name="model">supplier.quote</field>
+        <field name="arch" type="xml">
+            <tree string="Cotizaciones de Proveedores" decoration-muted="state == 'canceled'" decoration-danger="state == 'expired'" decoration-info="state == 'draft'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date"/>
+                <field name="validity_date"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="state" widget="badge" decoration-success="state == 'confirmed'" decoration-info="state == 'draft'" decoration-danger="state == 'expired'" decoration-muted="state == 'canceled'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_supplier_quote_form" model="ir.ui.view">
+        <field name="name">supplier.quote.form</field>
+        <field name="model">supplier.quote</field>
+        <field name="arch" type="xml">
+            <form string="Cotización de Proveedor">
+                <header>
+                    <button name="action_confirm" string="Confirmar" type="object" invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_cancel" string="Cancelar" type="object" invisible="state in ('canceled', 'expired')"/>
+                    <button name="action_set_draft" string="Volver a Borrador" type="object" invisible="state == 'draft'"/>
+                    <button name="copy_to_proposal" string="Crear Propuesta" type="object" invisible="state != 'confirmed'" class="btn-primary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,expired"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="date"/>
+                            <field name="validity_date"/>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" options="{'no_create': True}" groups="base.group_multi_currency"/>
+                            <field name="payment_term_id" options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Productos" name="products">
+                            <field name="line_ids" widget="section_and_note_one2many">
+                                <tree editable="bottom">
+                                    <control>
+                                        <create name="add_product_control" string="Añadir Producto"/>
+                                        <create name="add_section_control" string="Añadir Sección" context="{'default_display_type': 'line_section'}"/>
+                                        <create name="add_note_control" string="Añadir Nota" context="{'default_display_type': 'line_note'}"/>
+                                    </control>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="quantity"/>
+                                    <field name="product_uom_id" options="{'no_open': True, 'no_create': True}"/>
+                                    <field name="price_unit" widget="monetary"/>
+                                    <field name="delivery_time"/>
+                                    <field name="warranty_time"/>
+                                    <field name="subtotal" sum="Total" widget="monetary"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Términos y Condiciones" name="terms">
+                            <field name="terms" placeholder="Términos y condiciones de la cotización..."/>
+                        </page>
+                        <page string="Notas" name="notes">
+                            <field name="note" placeholder="Notas internas..."/>
+                        </page>
+                        <page string="Documentos" name="attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_supplier_quote_search" model="ir.ui.view">
+        <field name="name">supplier.quote.search</field>
+        <field name="model">supplier.quote</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Cotizaciones">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <filter string="Mis Cotizaciones" name="my_quotes" domain="[('user_id', '=', uid)]"/>
+                <separator/>
+                <filter string="Borrador" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirmada" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Expirada" name="expired" domain="[('state', '=', 'expired')]"/>
+                <filter string="Cancelada" name="canceled" domain="[('state', '=', 'canceled')]"/>
+                <group expand="0" string="Agrupar Por">
+                    <filter string="Proveedor" name="partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Estado" name="state" context="{'group_by': 'state'}"/>
+                    <filter string="Fecha" name="date" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_supplier_quote" model="ir.actions.act_window">
+        <field name="name">Cotizaciones de Proveedores</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">supplier.quote</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_my_quotes': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea tu primera cotización de proveedor
+            </p>
+            <p>
+                Las cotizaciones de proveedores te permiten registrar precios, tiempos de entrega 
+                y garantías para comparar y seleccionar las mejores opciones para tus propuestas.
+            </p>
+        </field>
+    </record>
+</odoo>

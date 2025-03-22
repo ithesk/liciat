@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Acciones primero para que estén disponibles -->
+    <!-- Acción para Licitaciones -->
+    <record id="action_tender" model="ir.actions.act_window">
+        <field name="name">Licitaciones</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tender.tender</field>
+        <field name="view_mode">kanban,tree,form,calendar,pivot,graph</field>
+        <field name="context">{'search_default_my_tenders': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea tu primera licitación
+            </p>
+            <p>
+                Las licitaciones te permiten gestionar ofertas presentadas a diferentes entidades.
+            </p>
+        </field>
+    </record>
+
+    <!-- Acción para Nuestras Propuestas -->
+    <record id="action_our_proposals" model="ir.actions.act_window">
+        <field name="name">Nuestras Propuestas</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tender.proposal</field>
+        <field name="view_mode">kanban,tree,form,calendar,pivot,graph</field>
+        <field name="domain">[('is_our_company', '=', True)]</field>
+        <field name="context">{'search_default_my_proposals': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea tu primera propuesta
+            </p>
+            <p>
+                Las propuestas te permiten presentar ofertas a licitaciones.
+            </p>
+        </field>
+    </record>
+
+    <!-- Acción para Todas las Propuestas -->
+    <record id="action_proposal" model="ir.actions.act_window">
+        <field name="name">Propuestas</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tender.proposal</field>
+        <field name="view_mode">kanban,tree,form,calendar,pivot,graph</field>
+        <field name="context">{'search_default_my_proposals': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea tu primera propuesta
+            </p>
+            <p>
+                Las propuestas te permiten presentar ofertas a licitaciones.
+            </p>
+        </field>
+    </record>
+
+        <!-- Primero definimos las acciones -->
+    <record id="action_government_document" model="ir.actions.act_window">
+        <field name="name">Documentos Gubernamentales</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">government.document</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea un nuevo documento gubernamental
+            </p>
+        </field>
+    </record>
+
+    <record id="action_government_bidding_data" model="ir.actions.act_window">
+        <field name="name">Datos para Licitaciones</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">government.bidding.data</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configura tus datos para licitaciones gubernamentales
+            </p>
+        </field>
+    </record>
+
+
+    <!-- Acciones para configuración -->
+    <record id="action_tender_state" model="ir.actions.act_window">
+        <field name="name">Estados de Licitación</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tender.state</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea el primer estado de licitación
+            </p>
+        </field>
+    </record>
+
+    <record id="action_tender_tags" model="ir.actions.act_window">
+        <field name="name">Etiquetas de Licitación</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tender.tags</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea la primera etiqueta de licitación
+            </p>
+        </field>
+    </record>
+
+    <!-- Menú principal -->
+    <menuitem id="menu_tender_root" 
+              name="Licitaciones" 
+              web_icon="tender_management,static/description/icon.png" 
+              sequence="75"/>
+
+    <!-- Submenús nivel 1 -->
+    <menuitem id="menu_tender_main" 
+              name="Licitaciones" 
+              parent="menu_tender_root" 
+              sequence="10"/>
+
+    <menuitem id="menu_proposal_main" 
+              name="Propuestas" 
+              parent="menu_tender_root" 
+              sequence="20"/>
+
+    <menuitem id="menu_tender_config" 
+              name="Configuración" 
+              parent="menu_tender_root" 
+              sequence="100" 
+              groups="base.group_system"/>
+
+    <!-- Submenús nivel 2 -->
+    <menuitem id="menu_tender" 
+              name="Licitaciones"
+              action="action_tender" 
+              parent="menu_tender_main"
+              sequence="10"/>
+
+    <menuitem id="menu_our_proposals" 
+              name="Nuestras Propuestas"
+              action="action_our_proposals" 
+              parent="menu_proposal_main"
+              sequence="10"/>
+
+    <menuitem id="menu_all_proposals" 
+              name="Todas las Propuestas"
+              action="action_proposal" 
+              parent="menu_proposal_main"
+              sequence="20"/>
+
+    <!-- Elementos de configuración -->
+    <menuitem id="menu_tender_states" 
+              name="Estados de Licitación"
+              action="action_tender_state" 
+              parent="menu_tender_config"
+              sequence="10"/>
+
+    <menuitem id="menu_tender_tags" 
+              name="Etiquetas"
+              action="action_tender_tags" 
+              parent="menu_tender_config"
+              sequence="20"/>
+
+        <!-- Añadir a menu_views.xml -->
+    <menuitem id="menu_tender_government_documents" 
+            name="Documentos Gubernamentales"
+            action="action_government_document" 
+            parent="menu_tender_config"
+            sequence="30"/>
+
+    <menuitem id="menu_tender_bidding_data" 
+            name="Datos para Licitaciones"
+            action="action_government_bidding_data" 
+            parent="menu_tender_config"
+            sequence="40"/>
+</odoo>
