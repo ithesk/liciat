@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Pivot View -->
+    <record id="view_supplier_quote_analysis_pivot" model="ir.ui.view">
+        <field name="name">supplier.quote.analysis.pivot</field>
+        <field name="model">supplier.quote.analysis</field>
+        <field name="arch" type="xml">
+            <pivot string="Análisis de Cotizaciones" sample="1">
+                <field name="product_id" type="row"/>
+                <field name="partner_id" type="col"/>
+                <field name="price_unit" type="measure" widget="monetary"/>
+                <field name="delivery_time" type="measure"/>
+                <field name="warranty_time" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph View -->
+    <record id="view_supplier_quote_analysis_graph" model="ir.ui.view">
+        <field name="name">supplier.quote.analysis.graph</field>
+        <field name="model">supplier.quote.analysis</field>
+        <field name="arch" type="xml">
+            <graph string="Análisis de Cotizaciones" sample="1">
+                <field name="product_id"/>
+                <field name="partner_id"/>
+                <field name="price_unit" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_supplier_quote_analysis_tree" model="ir.ui.view">
+        <field name="name">supplier.quote.analysis.tree</field>
+        <field name="model">supplier.quote.analysis</field>
+        <field name="arch" type="xml">
+            <tree string="Análisis de Cotizaciones" decoration-muted="not is_valid">
+                <field name="product_id"/>
+                <field name="partner_id"/>
+                <field name="date"/>
+                <field name="validity_date"/>
+                <field name="price_unit" widget="monetary"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="delivery_time"/>
+                <field name="warranty_time"/>
+                <field name="state" widget="badge"/>
+                <field name="is_valid" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_supplier_quote_analysis_search" model="ir.ui.view">
+        <field name="name">supplier.quote.analysis.search</field>
+        <field name="model">supplier.quote.analysis</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Análisis">
+                <field name="product_id"/>
+                <field name="partner_id"/>
+                <filter string="Cotizaciones Válidas" name="valid" domain="[('is_valid', '=', True)]"/>
+                <group expand="0" string="Agrupar Por">
+                    <filter string="Producto" name="product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Proveedor" name="partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Estado" name="state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_supplier_quote_analysis" model="ir.actions.act_window">
+        <field name="name">Análisis de Proveedores</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">supplier.quote.analysis</field>
+        <field name="view_mode">pivot,graph,tree</field>
+        <field name="context">{'search_default_valid': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aún no hay cotizaciones para analizar
+            </p>
+            <p>
+                Crea cotizaciones de proveedores para comparar precios, tiempos de entrega y garantías.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menú para análisis -->
+    <menuitem id="menu_supplier_quote_analysis" 
+              name="Análisis de Proveedores"
+              action="action_supplier_quote_analysis" 
+              parent="menu_supplier_quotes_main"
+              sequence="20"/>
+</odoo>

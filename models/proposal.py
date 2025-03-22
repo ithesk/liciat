@@ -2,6 +2,7 @@ from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime, timedelta
 import logging
+import math
 
 _logger = logging.getLogger(__name__)
 
@@ -84,6 +85,19 @@ class TenderProposal(models.Model):
         string='Datos de Licitación',
         default=lambda self: self.env['government.bidding.data'].get_company_data().id
     )
+
+    @api.depends('line_ids.cost_price', 'line_ids.price_subtotal')
+    def _compute_margin_percentage(self):
+            for proposal in self:
+                total_cost = sum(line.cost_price * line.product_uom_qty for line in proposal.line_ids)
+                if total_cost > 0 and proposal.amount_untaxed > 0:
+                    proposal.margin_percentage = (proposal.amount_untaxed - total_cost) / total_cost * 100
+                else:
+                    proposal.margin_percentage = 0.0
+
+    margin_percentage = fields.Float(
+            '% Margen', compute='_compute_margin_percentage', store=True,
+            help="Porcentaje de margen global de la propuesta")
     
     def _prepare_government_documents(self):
         """Prepara automáticamente los documentos requeridos"""
@@ -97,6 +111,7 @@ class TenderProposal(models.Model):
         for record in records:
             record._prepare_government_documents()
         return records
+    
 
     @api.model_create_multi
     def create(self, vals_list):

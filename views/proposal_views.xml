@@ -74,13 +74,28 @@
                                     <field name="name"/>
                                     <field name="product_uom_qty"/>
                                     <field name="product_uom_id" options="{'no_open': True, 'no_create': True}"/>
+                                    <field name="supplier_quote_count" optional="show"/>
+                                    <field name="best_supplier_id" optional="show"/>
+                                    <field name="cost_price" widget="monetary" optional="show"/>
+                                    <field name="margin" widget="percentage" optional="show"/>
                                     <field name="price_unit" widget="monetary"/>
                                     <field name="discount" groups="product.group_discount_per_so_line"/>
                                     <field name="tax_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('type_tax_use','=','sale')]"/>
                                     <field name="price_subtotal" sum="Subtotal" widget="monetary"/>
                                     <field name="currency_id" invisible="1"/>
+                                    <!-- Botón para ver cotizaciones disponibles -->
+                                    <button name="action_view_supplier_quotes" type="object" 
+                                            icon="fa-list-ul" string="Ver cotizaciones"
+                                            attrs="{'invisible': [('supplier_quote_count', '=', 0)]}"/>
                                 </tree>
                             </field>
+                            <!-- Añadir estadísticas de costos -->
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_untaxed" widget="monetary"/>
+                                <field name="amount_tax" widget="monetary"/>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary"/>
+                                <field name="margin_percentage" widget="percentage" class="oe_subtotal_footer_separator" groups="base.group_no_one"/>
+                            </group>
                             <group class="oe_subtotal_footer oe_right">
                                 <field name="amount_untaxed" widget="monetary"/>
                                 <field name="amount_tax" widget="monetary"/>

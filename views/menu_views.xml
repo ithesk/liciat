@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Acciones primero para que estén disponibles -->
+    <!-- Acción para Cotizaciones de Proveedores -->
+    <record id="action_supplier_quote" model="ir.actions.act_window">
+        <field name="name">Cotizaciones de Proveedores</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">supplier.quote</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea tu primera cotización de proveedor
+            </p>
+            <p>
+                Las cotizaciones de proveedores te permiten gestionar las ofertas de los proveedores.
+            </p>
+        </field>
+    </record>
+
     <!-- Acción para Licitaciones -->
     <record id="action_tender" model="ir.actions.act_window">
         <field name="name">Licitaciones</field>
@@ -133,6 +149,17 @@
               action="action_tender" 
               parent="menu_tender_main"
               sequence="10"/>
+
+    <menuitem id="menu_supplier_quotes_main" 
+             name="Cotizaciones" 
+             parent="menu_tender_root" 
+             sequence="15"/>
+
+    <menuitem id="menu_supplier_quote" 
+             name="Cotizaciones de Proveedores"
+             action="action_supplier_quote" 
+             parent="menu_supplier_quotes_main"
+             sequence="10"/>
 
     <menuitem id="menu_our_proposals" 
               name="Nuestras Propuestas"

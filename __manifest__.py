@@ -23,6 +23,8 @@
           'views/menu_views.xml',
           'views/government_document_views.xml',
           'views/government_bidding_data_views.xml',
+          'data/tender_sequences.xml',
+          'views/supplier_quote_views.xml',
         # 'reports/tender_report.xml',
         # 'reports/proposal_report.xml',
         # 'wizard/generate_proposal_views.xml',

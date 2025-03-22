@@ -21,3 +21,7 @@ access_government_document_user,government.document.user,model_government_docume
 access_government_document_manager,government.document.manager,model_government_document,group_tender_manager,1,1,1,1
 access_government_bidding_data_user,government.bidding.data.user,model_government_bidding_data,group_tender_user,1,1,1,0
 access_government_bidding_data_manager,government.bidding.data.manager,model_government_bidding_data,group_tender_manager,1,1,1,1
+access_supplier_quote_user,supplier.quote.user,model_supplier_quote,group_tender_user,1,1,1,0
+access_supplier_quote_manager,supplier.quote.manager,model_supplier_quote,group_tender_manager,1,1,1,1
+access_supplier_quote_line_user,supplier.quote.line.user,model_supplier_quote_line,group_tender_user,1,1,1,0
+access_supplier_quote_line_manager,supplier.quote.line.manager,model_supplier_quote_line,group_tender_manager,1,1,1,1

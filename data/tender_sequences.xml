@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Secuencia para propuestas -->
+        <record id="seq_tender_proposal" model="ir.sequence">
+            <field name="name">Secuencia de Propuestas</field>
+            <field name="code">tender.proposal</field>
+            <field name="prefix">PROP/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Secuencia para cotizaciones de proveedores -->
+        <record id="seq_supplier_quote" model="ir.sequence">
+            <field name="name">Cotización de Proveedor</field>
+            <field name="code">supplier.quote</field>
+            <field name="prefix">COT/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>
