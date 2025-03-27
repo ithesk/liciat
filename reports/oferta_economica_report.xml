@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_oferta_economica">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout"> 
+                    <link href="/liciat/static/src/css/0332.css" rel="stylesheet"/>
+
+                    <div class="palacio">
+                    <img src="/liciat/static/img/palacio.png"/>
+                    </div>
+                    
+
+                    <div class="logo-right">
+                            <div class="expediente">No. EXPEDIENTE</div>
+                            <!-- <span t-field="o.name"/> -->
+                            <span class="nes"><t t-esc="o.expediente"/></span>
+                        </div>
+                   
+                    <div class="contrataciones">
+                        <img src="/liciat/static/img/contra.png" style="width: 150px; height: auto;" />
+                    </div>
+                     
+                    <!-- Encabezado con SNCC code -->
+                    <div class="header-section">
+                        <div class="logo-left">SNCC.F.033</div>
+
+                        
+                        
+                        <div class="logo-center">
+                            <img src="/liciat/static/img/escudo.png" alt="Escudo de República Dominicana"/>
+                            <div class="ministry">Ministerio de Hacienda</div>
+                            <div>DIRECCION GENERAL DE CONTRATACIONES PÚBLICAS</div>
+                        </div>
+                        
+                        <!-- Fecha (a la derecha) -->
+                        <div class="fecha-line">
+                            <span class="fecha-label">Fecha:</span>
+                            <span class="fecha-value"><t t-esc="time.strftime('%d/%m/%Y')"/></span>
+                        </div>
+                        
+                        <!-- Título principal -->
+                        <div class="main-title">
+                            OFERTA ECONÓMICA
+                        </div>
+                       
+                        
+                        <!-- Información del oferente -->
+                        <div class="oferente-section">
+                            <span class="oferente-label">NOMBRE DEL OFERENTE:</span>
+                            <span class="oferente-value"><span t-field="o.company_id.name"/></span>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- Tabla de productos -->
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 7%;">Item No.</th>
+                                    <th style="width: 35%;">Descripción del Bien, Servicio u Obra</th>
+                                    <th style="width: 10%;">Unidad de medida<sup>1</sup></th>
+                                    <th style="width: 8%;">Cantidad<sup>2</sup></th>
+                                    <th style="width: 12%;">Precio Unitario</th>
+                                    <th style="width: 12%;">ITBIS</th>
+                                    <th style="width: 12%;">Precio Unitario Final</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.line_ids" t-as="line">
+                                    <tr>
+                                        <td><t t-esc="line_index + 1"/></td>
+                                        <td style="text-align: left;"><span t-field="line.name"/></td>
+                                        <td><span t-field="line.product_uom_id.name"/></td>
+                                        <td><span t-field="line.product_uom_qty"/></td>
+                                        <td>
+                                            <!-- Precio unitario sin ITBIS -->
+                                            <t t-set="price_without_tax" t-value="line.price_unit / 1.18"/>
+                                            <span t-field="o.currency_id.symbol"/><span t-esc="'{:,.2f}'.format(price_without_tax)"/>
+                                        </td>
+                                        <td>
+                                            <!-- ITBIS por unidad -->
+                                            <t t-set="itbis_per_unit" t-value="line.price_unit - (line.price_unit / 1.18)"/>
+                                            <!-- ITBIS total por línea -->
+                                            <t t-set="itbis_amount" t-value="itbis_per_unit * line.product_uom_qty"/>
+                                            <span t-field="o.currency_id.symbol"/><span t-esc="'{:,.2f}'.format(itbis_amount)"/>
+                                        </td>
+                                        <td>
+                                            <!-- Subtotal con ITBIS incluido -->
+                                            <t t-set="subtotal" t-value="line.price_unit * line.product_uom_qty"/>
+                                            <span t-field="o.currency_id.symbol"/><span t-esc="'{:,.2f}'.format(subtotal)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                
+                                <!-- Filas adicionales para mantener la tabla con 5 filas -->
+                                <t t-if="len(o.line_ids) &lt; 5">
+                                    <t t-foreach="range(5 - len(o.line_ids))" t-as="i">
+                                        <tr>
+                                            <td><t t-esc="len(o.line_ids) + i + 1"/></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                                        
+                   <div class="total-section">
+                        <div>
+                            <span class="total-title">VALOR TOTAL DE LA OFERTA:</span>
+                            <span class="total-dots">.............................................</span>
+                            <span class="total-value">
+                                <span t-field="o.currency_id.symbol"/>
+                                <span t-field="o.amount_total" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                            </span>
+                        </div>
+                        <div class="total-letters">
+                            <span>Valor total de la oferta en letras: </span>
+                            <span t-esc="o.currency_id.amount_to_text(o.amount_total)"/>
+                        </div>
+                    </div>
+                    
+                    <!-- Firma -->
+                    <div class="firma-section">
+                        <div class="firma-text">
+                            <span t-field="o.user_id.name"/> en calidad de GERENTE debidamente autorizado para actuar en nombre y representación de 
+                            <div class="text-comp">
+                            <span t-field="o.company_id.name"/>
+                            </div>
+                        </div>
+                        
+                        <div class="sello">
+                        <img src="/liciat/static/img/sello.png"/>
+                        </div>
+
+                        <div class="firma-box">
+                            <div class="firma-line">Firma______________________</div>
+                            <div class="fecha-firma">Fecha: __/__/____</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pie de página -->
+                    <div class="footer-section">
+                        <div class="footer-notes">
+                            <p><sup></sup> </p>
+                            <p><sup></sup> </p>
+                            <p></p>
+                        </div>
+
+                        
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="paperformat_oferta_economica" model="report.paperformat">
+            <field name="name">Formato Oferta Económica</field>
+            <field name="default" eval="False"/>
+            <field name="format">custom</field>  <!-- Usa "custom" para tamaños personalizados -->
+            <field name="page_height">297</field>  <!-- Altura en mm -->
+            <field name="page_width">250</field>   <!-- Ancho en mm -->
+            <field name="orientation">Landscape</field>  <!-- Portrait o Landscape -->
+            <field name="margin_top">10</field>    <!-- Margen superior en mm -->
+            <field name="margin_bottom">10</field> <!-- Margen inferior en mm -->
+            <field name="margin_left">7</field>    <!-- Margen izquierdo en mm -->
+            <field name="margin_right">7</field>   <!-- Margen derecho en mm -->
+            <field name="header_line" eval="False"/> <!-- Sin línea de encabezado -->
+            <field name="header_spacing">0</field>  <!-- Espacio para encabezado -->
+            <field name="dpi">96</field>           <!-- Resolución del PDF -->
+    </record>
+
+    <!-- Define el reporte -->
+    <record id="action_report_oferta_economica_sncc" model="ir.actions.report">
+        <field name="name">Oferta Económica (SNCC.F.033)</field>
+        <field name="model">tender.proposal</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">liciat.report_oferta_economica</field>
+        <field name="report_file">liciat.report_oferta_economica</field>
+        <field name="binding_model_id" ref="model_tender_proposal"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_oferta_economica"/>
+    </record>
+</odoo>

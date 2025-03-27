@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_presentacion_oferta">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <link href="/liciat/static/src/css/034.css" rel="stylesheet"/>
+
+                    <div class="logo1">
+                            <img src="/liciat/static/img/escudo.png" alt="Escudo de República Dominicana"/>
+                    </div>
+                    <div class="boxministerio">
+                    <div class="ministry-title">
+                            <span t-field="o.tender_id.entity_id.name"/>
+                    </div>
+                    </div>
+
+                    <div class="title1">
+                            <h1>PRESENTACIÓN DE OFERTA</h1>
+                    </div>
+
+                     <div class="logo-right">
+                                <div class="expediente">No. EXPEDIENTE</div>
+                                <div class="expediente-text"><span t-field="o.expediente"/></div>
+                    </div>
+
+                     <div class="date-page">
+                            <div class="fecha"><t t-esc="time.strftime('%d/%m/%Y')"/></div>
+                            
+                    </div>
+
+                     <div class="header">
+                            <div class="logo-left">
+                                <div class="sncc">SNCC.F.034</div>
+                                <div class="logo-box">
+                                    <img src="/liciat/static/img/palacio.png" style="width: 130px; height: auto;"/>
+                                </div>
+                            </div>
+                        </div>
+
+
+                         <div class="final">
+                          <img src="/liciat/static/img/contra.png" alt="Logo Contrataciones Públicas" class="logo-footer"/>
+                         </div>
+
+                    
+                    <!-- PÁGINA 1 -->
+                    <div class="container">
+                        <!-- ENCABEZADO -->
+                    
+                        <!-- FECHA Y PÁGINA -->
+                       
+
+                        <!-- TÍTULO -->
+                        
+
+                        <!-- CONTENIDO -->
+                        <div class="content">
+                            <p><strong>Señores</strong><br/>
+                            <span class="highlight"><span t-field="o.company_id.name"/></span></p>
+
+                            <p><strong>Nosotros, los suscritos, declaramos que:</strong></p>
+
+                            <div class="declaration">
+                                <p><strong>a)</strong> Hemos examinado y no tenemos reservas a los Pliegos de Condiciones para la Licitación de referencia, incluyendo las siguientes enmiendas/ adendas realizadas a los mismos:</p>
+                                <div class="lines">
+                                    <div class="line"></div>
+                                    <div class="line"></div>
+                                  
+                                </div>
+
+                               <p><strong>b)</strong> De conformidad con los Pliegos de Condiciones y según el plan de entrega especificado en el Programa de Suministros/ Cronograma de Ejecución, nos comprometemos a suministrar los siguientes bienes y servicios conexos, o ejecutar los siguientes servicios u Obras:</p>
+
+                                <!-- Lista de productos en formato narrativo -->
+                                <div class="product-description mt-3">
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                        <p class="mb-2">
+                                            <span t-esc="line_index + 1"/>. 
+                                            <span t-esc="int(line.product_uom_qty)"/>
+                                            <span t-field="line.product_id.name"/>
+                                            <span t-field="line.name"/>
+                                            con capacidad de
+                                            <t t-if="line.product_id.description_sale">
+                                                <span t-field="line.product_id.description_sale"/>
+                                            </t>
+                                            <t t-else="">
+                                                acuerdo a especificaciones
+                                            </t>
+                                            con garantía de <span t-field="line.warranty_time"/> meses.
+                                        </p>
+                                    </t>
+                                </div>
+
+                                <div class="lines">
+                                    <div class="line"></div>
+                                </div>
+
+                                <p><strong>c)</strong> Si nuestra oferta es aceptada, nos comprometemos a obtener una garantía de fiel cumplimiento del Contrato, de conformidad con los Pliegos de Condiciones de la Licitación, por el importe del <strong>CUATRO POR CIENTO (4%)</strong> del monto total de la adjudicación, para asegurar el fiel cumplimiento del Contrato.</p>
+
+                                <p><strong>d)</strong> Para esta licitación no somos partícipes en calidad de Oferentes en más de una Oferta, excepto en el caso de ofertas alternativas, de conformidad con los Pliegos de Condiciones de la Licitación.</p>
+
+                                <p><strong>e)</strong> Nuestra firma, sus afiliadas o subsidiarias, incluyendo cualquier subcontratista o proveedor de cualquier parte del Contrato, no han sido declarados inelegibles por el Comprador para presentar ofertas.</p>
+
+                                <p><strong>f)</strong> Entendemos que esta Oferta, junto con su aceptación por escrito que se encuentra incluida en la notificación de adjudicación, constituirán una obligación contractual, hasta la preparación y ejecución del Contrato formal.</p>
+
+                                <p><strong>g)</strong> Entendemos que el Comprador no está obligado a aceptar la Oferta evaluada como la más baja ni ninguna otra de las Ofertas que reciba.</p>
+                            </div>
+
+                            <!-- FIRMA -->
+                            <div class="signature-section">
+                                <p><span class="highlight"><span t-field="o.user_id.name"/></span> en calidad de GERENTE debidamente autorizado para actuar en nombre y representación de <span class="highlight"><span t-field="o.company_id.name"/></span>.</p>
+                                
+                                <div class="sello">
+                                <img src="/liciat/static/img/sello.png"/>
+                                </div>
+
+                                <div class="signature">
+                                    <p>Firma ____________________________________</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PIE DE PÁGINA -->
+                       
+
+                   
+                    <!-- <div class="container"> -->
+                        <!-- ENCABEZADO -->
+                        
+                        
+                        <!-- FECHA Y PÁGINA -->
+                      
+                    </div>
+
+                    <!-- </div> -->
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Definir formato de papel personalizado -->
+    <record id="paperformat_presentacion_oferta" model="report.paperformat">
+        <field name="name">Formato Presentación de Oferta</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- Definir el reporte -->
+    <record id="action_report_presentacion_oferta" model="ir.actions.report">
+        <field name="name">Presentación de Oferta (SNCC.F.034)</field>
+        <field name="model">tender.proposal</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">liciat.report_presentacion_oferta</field>
+        <field name="report_file">liciat.report_presentacion_oferta</field>
+        <field name="binding_model_id" ref="model_tender_proposal"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_presentacion_oferta"/>
+    </record>
+</odoo>

@@ -1,0 +1,207 @@
+/* Estilos para Formulario de Información sobre el Oferente SNCC.F.042 (Compatible con wkhtmltopdf) */
+
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    font-size: 12px;
+}
+
+.container-form {
+    width: 100%;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    padding: 15px;
+    position: relative;
+}
+
+.sello {
+    position: absolute;
+    top: 750px;
+    right: 320px;
+}
+
+/* Tablas de estructura - wkhtmltopdf trabaja mejor con tablas */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Encabezado */
+.header-table {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.header-table td {
+    vertical-align: top;
+}
+
+.header-left {
+    width: 33%;
+    text-align: left;
+}
+
+.header-center {
+    width: 34%;
+    text-align: center;
+}
+
+.header-right {
+    width: 33%;
+    text-align: right;
+}
+
+.sncc {
+    color: #c00000;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.logo-contrataciones {
+    width: 120px;
+    height: auto;
+}
+
+.escudo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 5px;
+}
+
+.ministry {
+    font-style: italic;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.dept {
+    font-weight: bold;
+    text-align: center;
+}
+
+.expediente-box {
+    border: 2px solid #000;
+    padding: 5px;
+    text-align: center;
+    width: 170px;
+    float: right;
+}
+
+.expediente-title {
+    background-color: #000;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.expediente-text {
+    padding: 5px;
+}
+
+/* Fecha y página */
+.date-page-table {
+    width: 100%;
+    margin: 30px 0;
+}
+
+.date-cell {
+    text-align: left;
+    width: 50%;
+}
+
+.page-cell {
+    text-align: right;
+    width: 50%;
+}
+
+/* Título */
+.title-box {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.title-box h1 {
+    font-size: 18px;
+    margin: 0;
+    font-weight: bold;
+}
+
+/* Formulario */
+.form-table {
+    width: 100%;
+    border: 1px solid #000;
+    margin: 20px 0;
+}
+
+.form-row {
+    border-bottom: 1px solid #000;
+}
+
+.form-row:last-child {
+    border-bottom: none;
+}
+
+.form-number {
+    width: 30px;
+    padding: 10px;
+    font-weight: bold;
+    border-right: 1px solid #000;
+    vertical-align: top;
+}
+
+.form-label {
+    width: 40%;
+    padding: 10px;
+    border-right: 1px solid #000;
+    vertical-align: top;
+}
+
+.form-field {
+    padding: 10px;
+    vertical-align: top;
+}
+
+.tall-row td {
+    height: 100px;
+}
+
+.representative-row td {
+    height: 150px;
+}
+
+.representative-info p {
+    margin: 10px 0;
+}
+
+/* Firma */
+.signature {
+    margin: 30px 0;
+}
+
+/* Pie de página */
+.footer-table {
+    width: 100%;
+    margin-top: 40px;
+}
+
+.footer-left {
+    width: 30%;
+    text-align: left;
+    vertical-align: top;
+}
+
+.footer-right {
+    width: 70%;
+    text-align: right;
+    vertical-align: top;
+}
+
+.logo-footer {
+    width: 60px;
+    height: auto;
+    margin-top: 5px;
+}

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_oferta_tecnica">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <!-- Incluir CSS -->
+                        <link rel="stylesheet" href="/liciat/static/src/css/oferta.css"/>
+                        
+                        <div class="container-form">
+                            <!-- ENCABEZADO PERSONALIZADO -->
+                            <table class="header-table">
+                                <tr>
+                                    <!-- Logo -->
+                                    <td class="logo-area">
+                                        <img t-att-src="'/liciat/static/img/logo.png'" alt="Logo de la Empresa" class="company-logo"/>
+                                    </td>
+                                    
+                                    <!-- Detalles de Compañía -->
+                                    <td class="company-details">
+                                        <h1><span t-field="o.company_id.name"/></h1>
+                                        <p><span t-field="o.company_id.street"/>, <span t-field="o.company_id.city"/>, <span t-field="o.company_id.country_id.name"/></p>
+                                        <p>Teléfono: <span t-field="o.company_id.phone"/> | Email: <span t-field="o.company_id.email"/></p>
+                                        <p>RNC: <span t-field="o.company_id.vat"/></p>
+                                    </td>
+                                    
+                                    <!-- Información del Documento -->
+                                    <td class="document-info">
+                                        <div class="doc-title">OFERTA TÉCNICA</div>
+                                        <div class="doc-ref">Ref: <span t-field="o.name"/></div>
+                                        <div class="doc-date">Fecha: <span t-esc="time.strftime('%d/%m/%Y')"/></div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- INFORMACIÓN DEL CLIENTE -->
+                            <div class="client-section">
+                                <div class="section-title">INFORMACIÓN DEL CLIENTE</div>
+                                <table class="client-table">
+                                    <tr>
+                                        <td class="form-label">Cliente:</td>
+                                        <td class="form-field"><span t-field="o.partner_id.name"/></td>
+                                        <td class="form-label">Dirección:</td>
+                                        <td class="form-field"><span t-field="o.partner_id.street"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="form-label">Contacto:</td>
+                                        <td class="form-field"><span t-field="o.partner_id.phone"/></td>
+                                        <td class="form-label">Referencia:</td>
+                                        <td class="form-field"><span t-field="o.tender_id.name"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!-- SECCIÓN 1: PRODUCTO Y DESCRIPCIÓN -->
+                            <div class="section">
+                                <div class="section-title">1. PRODUCTO Y DESCRIPCIÓN</div>
+                                <div class="section-content">
+                                    <table class="product-table">
+                                        <thead>
+                                            <tr>
+                                                <th width="10%">Ítem</th>
+                                                <th width="30%">Producto</th>
+                                                <th width="60%">Descripción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <tr>
+                                                    <td><span t-esc="line_index + 1"/></td>
+                                                    <td><span t-field="line.product_id.name"/></td>
+                                                    <td><span t-field="line.name"/></td>
+                                                </tr>
+                                            </t>
+                                            <!-- Filas adicionales si hay menos de 5 líneas -->
+                                            <t t-if="len(o.line_ids) &lt; 5">
+                                                <t t-foreach="range(5 - len(o.line_ids))" t-as="i">
+                                                    <tr>
+                                                        <td><span t-esc="len(o.line_ids) + i + 1"/></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </t>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- SECCIÓN 2: CONDICIONES DE LA PROPUESTA -->
+                            <div class="section">
+                                <div class="section-title">2. CONDICIONES DE LA PROPUESTA</div>
+                                <div class="section-content">
+                                    <!-- <p t-field="o.technical_conditions" t-options="{'widget': 'text'}"/> -->
+                                </div>
+                            </div>
+
+                            <!-- SECCIÓN 3: GARANTÍA -->
+                            <div class="section">
+                                <div class="section-title">3. GARANTÍA</div>
+                                <div class="section-content">
+                                    <table class="guarantee-table">
+                                        <tr>
+                                            <td class="form-label">Tipo de garantía ofrecida:</td>
+                                            <td class="form-field">
+                                                <div class="checkbox-group">
+                                                    <label>
+                                                        <!-- <input type="checkbox" t-att-checked="o.warranty_type == 'manufacturer'"/> -->
+                                                        Garantía del fabricante
+                                                    </label>
+                                                    <label>
+                                                        <!-- <input type="checkbox" t-att-checked="o.warranty_type == 'extended'"/> -->
+                                                        Garantía extendida
+                                                    </label>
+                                                    <label>
+                                                        <!-- <input type="checkbox" t-att-checked="o.warranty_type == 'other'"/> -->
+                                                        Otro tipo
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="form-label">Período de garantía:</td>
+                                            <td class="form-field">
+                                                <t t-if="o.line_ids">
+                                                    <!-- <span t-field="o.line_ids[0].warranty_time"/> meses -->
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="form-label">Cobertura de la garantía:</td>
+                                            <td class="form-field">
+                                                <!-- <span t-field="o.warranty_coverage" t-options="{'widget': 'text'}"/> -->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- SECCIÓN 4: PLAZO DE ENTREGA -->
+                            <div class="section">
+                                <div class="section-title">4. PLAZO DE ENTREGA</div>
+                                <div class="section-content">
+                                    <table class="delivery-table">
+                                        <tr>
+                                            <td class="form-label">Tiempo de entrega:</td>
+                                            <td class="form-field">
+                                                <!-- <span t-field="o.delivery_time"/> días hábiles -->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="form-label">Cronograma de entrega:</td>
+                                            <td class="form-field">
+                                                <!-- <span t-field="o.delivery_schedule" t-options="{'widget': 'text'}"/> -->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- SECCIÓN 5: SOPORTE TÉCNICO -->
+                            <div class="section">
+                                <div class="section-title">5. SOPORTE TÉCNICO</div>
+                                <div class="section-content">
+                                    <table class="support-table">
+                                        <tr>
+                                            <td class="form-label">Tipo de soporte ofrecido:</td>
+                                            <td class="form-field">
+                                                <div class="checkbox-group">
+                                                    <label>
+                                                        <!-- <input type="checkbox" t-att-checked="'phone' in o.support_type"/> -->
+                                                        Soporte telefónico
+                                                    </label>
+                                                    <label>
+                                                        <!-- <input type="checkbox" t-att-checked="'remote' in o.support_type"/> -->
+                                                        Soporte remoto
+                                                    </label>
+                                                    <label>
+                                                        <!-- <input type="checkbox" t-att-checked="'onsite' in o.support_type"/> -->
+                                                        Soporte presencial
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="form-label">Horario de soporte:</td>
+                                            <td class="form-field">
+                                                <!-- <span t-field="o.support_hours"/> -->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="form-label">Tiempo de respuesta:</td>
+                                            <td class="form-field">
+                                                <!-- <span t-field="o.response_time"/> horas -->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="form-label">Detalles adicionales:</td>
+                                            <td class="form-field">
+                                                <!-- <span t-field="o.support_details" t-options="{'widget': 'text'}"/> -->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- FIRMA Y AUTORIZACIÓN -->
+                            <div class="signature-section">
+                                <div class="signature-title">FIRMA Y AUTORIZACIÓN</div>
+                                <div class="signature-content">
+                                    <table class="signature-table">
+                                        <tr>
+                                            <td class="signature-box">
+                                                <p>Preparado por:</p>
+                                                <div class="signature-line"></div>
+                                                <p class="signature-name"><span t-field="o.user_id.name"/><br/><span t-field="o.user_id.function"/></p>
+                                            </td>
+                                            <td class="signature-box">
+                                                <p>Aprobado por:</p>
+                                                <div class="signature-line"></div>
+                                                <!-- <p class="signature-name"><span t-field="o.approve_id.name"/><br/><span t-field="o.approve_id.function"/></p> -->
+                                            </td>
+                                            <td class="company-seal">
+                                                <p>Sello de la Empresa</p>
+                                                <div class="seal-box">
+                                                    <img t-att-src="'/liciat/static/img/sello.png'" class="seal-img"/>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- PIE DE PÁGINA -->
+                            <div class="footer-section">
+                                <table class="footer-table">
+                                    <tr>
+                                        <td class="footer-left">
+                                            <p>© <t t-esc="time.strftime('%Y')"/> <span t-field="o.company_id.name"/>. Todos los derechos reservados.</p>
+                                        </td>
+                                        <td class="footer-right">
+                                            <p>Página 1 de 1</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Definir formato de papel personalizado -->
+    <record id="paperformat_oferta_tecnica" model="report.paperformat">
+        <field name="name">Formato Oferta Técnica</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">25</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">20</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- Definir el reporte -->
+    <record id="action_report_oferta_tecnica" model="ir.actions.report">
+        <field name="name">Oferta Técnica</field>
+        <field name="model">tender.proposal</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">liciat.report_oferta_tecnica</field>
+        <field name="report_file">liciat.report_oferta_tecnica</field>
+        <field name="binding_model_id" ref="model_tender_proposal"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_oferta_tecnica"/>
+    </record>
+</odoo>

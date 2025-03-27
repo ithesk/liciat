@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Definición del template principal -->
+    <template id="report_informacion_oferente">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <!-- Incluir CSS -->
+                        <link rel="stylesheet" href="/liciat/static/src/css/042.css"/>
+                        
+                        <div class="sello">
+                        <img src="/liciat/static/img/sello.png"/>
+                        </div>
+                        <!-- Contenedor principal -->
+                        <div class="container-form">
+                            <!-- ENCABEZADO -->
+                            <table class="header-table">
+                                <tr>
+                                    <!-- Logo izquierdo -->
+                                    <td class="header-left">
+                                        <div class="sncc">SNCC.F.042</div>
+                                        <img t-att-src="'/liciat/static/img/contra.png'" alt="Logo Contrataciones Públicas" class="logo-contrataciones"/>
+                                    </td>
+                                    
+                                    <!-- Logo central -->
+                                    <td class="header-center">
+                                        <img t-att-src="'/liciat/static/img/escudo.png'" alt="Escudo de República Dominicana" class="escudo"/>
+                                        <div class="ministry">Ministerio de Hacienda</div>
+                                        <div class="dept">Dirección General de Contrataciones Públicas</div>
+                                    </td>
+                                    
+                                    <!-- Expediente derecho -->
+                                    <td class="header-right">
+                                        <div class="expediente-box">
+                                            <div class="expediente-title">No. EXPEDIENTE</div>
+                                            <div class="expediente-text"><span t-field="o.expediente"/></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- FECHA Y PÁGINA -->
+                            <table class="date-page-table">
+                                <tr>
+                                    <td class="date-cell">Fecha: <t t-esc="time.strftime('%d/%m/%Y')"/></td>
+                                    <td class="page-cell">Página 1 de 1</td>
+                                </tr>
+                            </table>
+
+                            <!-- TÍTULO -->
+                            <div class="title-box">
+                                <h1>FORMULARIO DE INFORMACIÓN SOBRE EL OFERENTE</h1>
+                            </div>
+
+                            <!-- FORMULARIO -->
+                            <table class="form-table">
+                                <!-- Fila 1 -->
+                                <tr class="form-row">
+                                    <td class="form-number">1.</td>
+                                    <td class="form-label">Nombre o Razón Social del Oferente:</td>
+                                    <td class="form-field"><span t-field="o.company_id.name"/></td>
+                                </tr>
+                                
+                                <!-- Fila 2 -->
+                                <tr class="form-row tall-row">
+                                    <td class="form-number">2.</td>
+                                    <td class="form-label">Si se trata de una asociación temporal o Consorcio, nombre jurídico de cada miembro:</td>
+                                    <td class="form-field"></td>
+                                </tr>
+                                
+                                <!-- Fila 3 -->
+                                <tr class="form-row">
+                                    <td class="form-number">3.</td>
+                                    <td class="form-label">RNC del Oferente:</td>
+                                    <td class="form-field"><span t-field="o.company_id.vat"/></td>
+                                </tr>
+                                
+                                <!-- Fila 4 -->
+                                <tr class="form-row">
+                                    <td class="form-number">4.</td>
+                                    <td class="form-label">RPE del Oferente:</td>
+                                    <td class="form-field">
+                                     <t t-set="bidding_data" t-value="env['government.bidding.data'].search([('company_id', '=', o.company_id.id)], limit=1)"/>
+                                     <span t-esc="bidding_data.rpe_number if bidding_data else ''"/>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Fila 5 -->
+                                <tr class="form-row">
+                                    <td class="form-number">5.</td>
+                                    <td class="form-label">Domicilio legal del Oferente:</td>
+                                    <td class="form-field"><span t-field="o.company_id.street"/> <span t-field="o.company_id.city"/></td>
+                                </tr>
+                                
+                                <!-- Fila 6 -->
+                                <tr class="form-row representative-row">
+                                    <td class="form-number">6.</td>
+                                    <td class="form-label">Información del Representante autorizado del Oferente:</td>
+                                    <td class="form-field">
+                                        <div class="representative-info">
+                                            <p>Nombre: <span t-field="o.user_id.name"/></p>
+                                            <p>Dirección: <span t-field="o.user_id.partner_id.street"/></p>
+                                            <p>Números de teléfono y fax: <span t-field="o.user_id.partner_id.phone"/></p>
+                                            <p>Dirección de correo electrónico: <span t-field="o.user_id.partner_id.email"/></p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- FIRMA -->
+                            <div class="signature">
+                                <p>Nombre y Firma _______________________________________________________</p>
+                            </div>
+
+                            <!-- PIE DE PÁGINA -->
+                            <table class="footer-table">
+                                <tr>
+                                    <td class="footer-left">
+                                        <p>/UR.10.2012</p>
+                                    </td>
+                                    <td class="footer-right">
+                                        <p>DISTRIBUCIÓN Y COPIAS<br/>
+                                        Original 1 – Expediente de Compras</p>
+                                        <img t-att-src="'/liciat/static/img/contra.png'" alt="Logo Contrataciones Públicas" class="logo-footer"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Definir formato de papel personalizado -->
+    <record id="paperformat_informacion_oferente" model="report.paperformat">
+        <field name="name">Formato Información sobre el Oferente</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">25</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">20</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- Definir el reporte -->
+    <record id="action_report_informacion_oferente" model="ir.actions.report">
+        <field name="name">Información sobre el Oferente (SNCC.F.042)</field>
+        <field name="model">tender.proposal</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">liciat.report_informacion_oferente</field>
+        <field name="report_file">liciat.report_informacion_oferente</field>
+        <field name="binding_model_id" ref="model_tender_proposal"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_informacion_oferente"/>
+    </record>
+</odoo>

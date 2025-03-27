@@ -1,0 +1,265 @@
+/* Estilos para Presentación de Oferta SNCC.F.034 */
+.page {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+@page {
+    size: A4;
+    margin: 20mm;
+  }
+
+.o_report_layout_standard {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+.header {
+    position: absolute;
+    top: 20px;
+
+}
+/* body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+} */
+
+
+.sello {
+    position: absolute;
+    top: 800px;
+    left: 600px;
+    opacity: 0.8; /* 0 = invisible, 1 = opaco */
+    
+    
+}
+
+.final {
+    position: absolute;
+    top: 1100px;
+    right: 5px;
+
+}
+
+/* .container {
+    max-width: 800px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    position: relative;
+} */
+
+/* Encabezado */
+/* .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #002a5b;
+    padding-bottom: 10px;
+} */
+
+.logo-left {
+    position: absolute;
+    left: 10px;
+    top: 50px;
+}
+
+.sncc {
+    color: #c00000;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.logo-box {
+    width: 85px;
+    height: 85px;
+    
+    /* background-color: #f0f8ff; */
+    /* border: 1px solid #ccc; */
+}
+
+.logo-center {
+    position: absolute;
+    left: 900px;
+    
+}
+
+/* .logo-center img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 5px;
+} */
+
+.ministry-title {
+    font-weight: bold;
+    text-align: center;
+}
+
+.boxministerio {
+    position: absolute;
+    left: 285px;
+    top: 190px;
+    margin: 20px 0;
+}
+
+.logo-right {
+    border: 2px solid #000;
+    padding: 5px;
+    text-align: center;
+    width: 170px;
+    position: absolute;
+    right: 2px;
+    top: 10px;
+
+    
+}
+
+.expediente {
+    background-color: #000;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+/* Fecha y página */
+.date-page {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0 20px;
+}
+
+.page {
+    text-align: right;
+}
+
+/* Título */
+.title1 {
+    text-align: center;
+    font-weight: bold;
+    
+    
+    /* margin: 20px 0; */
+    position: absolute;
+    top: 250px;
+    left: 355px;
+}
+
+.title1 h1 {
+   font-size: 15px;
+   font-weight: bold;
+}
+
+.title h1 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.logo1 {
+   position: absolute;
+   
+   left: 400px;
+   top: 70px;
+  
+}
+
+/* Contenido */
+.content {
+    margin-bottom: 20px;
+    position: absolute;
+    top: 300px;
+}
+
+.highlight {
+    color: #c00000;
+}
+
+.declaration p {
+    text-align: justify;
+    margin: 10px 0;
+}
+
+.declaration strong {
+    margin-right: 5px;
+}
+
+.lines {
+    margin: 10px 0 20px;
+}
+
+.line {
+    height: 1px;
+    border-bottom: 1px solid #000;
+    margin: 15px 0;
+}
+
+/* Firma */
+.signature-section {
+    margin-top: 30px;
+}
+
+.signature {
+    margin: 20px 0;
+}
+
+.signature-note {
+    font-style: italic;
+}
+
+.date-page {
+   position: absolute;
+   right: 15px;
+   top: 100px;
+
+}
+
+/* Pie de página */
+/* .footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    font-size: 12px;
+} */
+
+.footer-left {
+    width: 30%;
+}
+
+.footer-right {
+    width: 70%;
+    text-align: right;
+}
+
+.logo-footer {
+    width: 60px !important;
+    height: auto !important;
+    position: absolute;
+    top: 3px;
+    right: 3px; 
+}
+
+/* Página 2 */
+/* .page-break {
+    page-break-after: always;
+    margin: 50px 0;
+    border-top: 1px dashed #ccc;
+} */
+
+/* .page-number {
+    text-align: right;
+    margin: 10px 0 30px;
+} */
+/* 
+.content-page2 {
+    min-height: 400px;
+} */
+

@@ -18,6 +18,7 @@ class Tender(models.Model):
     title = fields.Char('Título', required=True, tracking=True)
     description = fields.Html('Descripción', sanitize=True)
     
+    
     entity_id = fields.Many2one('res.partner', string='Entidad Licitante', 
                                required=True, tracking=True, 
                                domain=[('is_company', '=', True)])
@@ -41,7 +42,7 @@ class Tender(models.Model):
     date_closing = fields.Date('Fecha de Cierre', required=True, tracking=True)
     
     state_id = fields.Many2one('tender.state', string='Estado', 
-                              required=True, tracking=True, 
+                              required=False, tracking=True, 
                               default=lambda self: self.env['tender.state'].search([('code', '=', 'draft')], limit=1))
     
     state = fields.Selection([

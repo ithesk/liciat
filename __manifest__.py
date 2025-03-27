@@ -1,5 +1,5 @@
 {
-    'name': 'Gestión de Licitaciones',
+    'name': 'liciat',
     'version': '1.0',
     'category': 'Sales/Licitaciones',
     'summary': 'Módulo para gestionar licitaciones y propuestas',
@@ -25,6 +25,12 @@
           'views/government_bidding_data_views.xml',
           'data/tender_sequences.xml',
           'views/supplier_quote_views.xml',
+          'reports/oferta_economica_report.xml',
+          'reports/presentacion_oferta.xml',
+          'reports/infomacion_oferente.xml',
+          'reports/oferta_tecnica.xml',
+
+        #   'reports/oferta033.xml',
         # 'reports/tender_report.xml',
         # 'reports/proposal_report.xml',
         # 'wizard/generate_proposal_views.xml',

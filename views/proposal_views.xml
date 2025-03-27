@@ -8,6 +8,7 @@
             <tree string="Propuestas" sample="1" decoration-info="state == 'draft'" decoration-success="state in ('selected', 'awarded')" decoration-danger="state in ('rejected', 'canceled')">
                 <field name="name"/>
                 <field name="tender_id"/>
+                <field name="expediente"/>
                 <field name="partner_id"/>
                 <field name="submission_date"/>
                 <field name="is_our_company"/>
@@ -49,6 +50,7 @@
                     <group>
                         <group>
                             <field name="tender_id" domain="[('state', 'in', ['published', 'in_process', 'evaluation'])]"/>
+                            <field name="expediente"/>
                             <field name="partner_id"/>
                             <field name="user_id" widget="many2one_avatar_user"/>
                             <field name="submission_date"/>

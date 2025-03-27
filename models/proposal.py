@@ -16,6 +16,8 @@ class TenderProposal(models.Model):
                       readonly=True, states={'draft': [('readonly', False)]}, 
                       index=True, default=lambda self: _('Nueva'))
     
+    expediente = fields.Char('N0.Expediente', required=False, tracking=True)
+    
     tender_id = fields.Many2one('tender.tender', string='Licitación', 
                                required=True, ondelete='restrict', tracking=True)
     
@@ -46,7 +48,7 @@ class TenderProposal(models.Model):
                                 required=True, default=lambda self: self.env.company)
     
     currency_id = fields.Many2one('res.currency', string='Moneda', 
-                                 required=True, related='tender_id.currency_id', store=True)
+                                 required=False, related='tender_id.currency_id', store=True)
     
     line_ids = fields.One2many('tender.proposal.line', 'proposal_id', 
                                string='Líneas de Propuesta')
@@ -267,6 +269,21 @@ class TenderProposalLine(models.Model):
     best_supplier_id = fields.Many2one('res.partner', string='Mejor Proveedor', compute='_compute_best_supplier_price')
     margin = fields.Float('Margen (%)', default=15.0)
     cost_price = fields.Float('Costo', compute='_compute_cost_price')
+
+        # En el modelo tender.proposal.line
+    warranty_time = fields.Integer(string='Garantía (meses)', compute='_compute_warranty_time')
+
+    def _compute_warranty_time(self):
+        for line in self:
+            # Buscar la cotización del suplidor para este producto
+            supplier_quote_line = self.env['supplier.quote.line'].search([
+                ('product_id', '=', line.product_id.id),
+                # Puedes agregar más condiciones según tu estructura, como el suplidor específico
+                # ('partner_id', '=', line.proposal_id.partner_id.id)
+            ], limit=1)
+            
+            # Asignar el tiempo de garantía o un valor por defecto
+            line.warranty_time = supplier_quote_line.warranty_time if supplier_quote_line else 12
     
     def _compute_supplier_quote_count(self):
         for line in self:

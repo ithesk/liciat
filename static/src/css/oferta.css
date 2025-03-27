@@ -1,0 +1,263 @@
+/* Estilos para Oferta Técnica (Compatible wkhtmltopdf) */
+
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    font-size: 12px;
+}
+
+.container-form {
+    width: 100%;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background-color: #fff;
+    position: relative;
+}
+
+/* Tablas de estructura */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Encabezado personalizado */
+.header-table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #003366;
+    padding-bottom: 15px;
+}
+
+.header-table td {
+    vertical-align: top;
+}
+
+.logo-area {
+    width: 20%;
+}
+
+.company-logo {
+    width: 120px;
+    height: auto;
+}
+
+.company-details {
+    width: 50%;
+    padding: 0 15px;
+}
+
+.company-details h1 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    color: #003366;
+}
+
+.company-details p {
+    margin: 5px 0;
+    font-size: 12px;
+}
+
+.document-info {
+    width: 30%;
+    text-align: right;
+}
+
+.doc-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #003366;
+}
+
+.doc-ref, .doc-date {
+    font-size: 12px;
+    margin: 5px 0;
+}
+
+/* Información del cliente */
+.client-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.section-title {
+    background-color: #003366;
+    color: white;
+    padding: 8px 15px;
+    font-weight: bold;
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.client-table {
+    width: 100%;
+}
+
+.client-table td {
+    padding: 5px;
+}
+
+/* Secciones */
+.section {
+    margin: 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #fff;
+}
+
+.section-content {
+    padding: 0 10px;
+}
+
+/* Tabla de productos */
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+.product-table th,
+.product-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.product-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.product-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Formularios */
+.form-label {
+    width: 30%;
+    padding-right: 15px;
+    font-weight: bold;
+    vertical-align: top;
+}
+
+.form-field {
+    width: 70%;
+    vertical-align: top;
+}
+
+.checkbox-group {
+    display: table;
+    width: 100%;
+}
+
+.checkbox-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.guarantee-table, .delivery-table, .support-table {
+    width: 100%;
+}
+
+.guarantee-table td, .delivery-table td, .support-table td {
+    padding: 5px;
+    vertical-align: top;
+}
+
+/* Firma y autorización */
+.signature-section {
+    margin: 25px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.signature-title {
+    background-color: #003366;
+    color: white;
+    padding: 8px 15px;
+    font-weight: bold;
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.signature-content {
+    padding: 10px 0;
+}
+
+.signature-table {
+    width: 100%;
+}
+
+.signature-box {
+    width: 33.33%;
+    text-align: center;
+    vertical-align: top;
+    padding: 10px;
+}
+
+.signature-line {
+    height: 1px;
+    background-color: #000;
+    margin: 40px auto 10px;
+    width: 80%;
+}
+
+.signature-name {
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.company-seal {
+    width: 33.33%;
+    text-align: center;
+    vertical-align: top;
+    padding: 10px;
+}
+
+.seal-box {
+    width: 100px;
+    height: 100px;
+    margin: 5px auto;
+}
+
+.seal-img {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+/* Pie de página */
+.footer-section {
+    margin-top: 30px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.footer-table {
+    width: 100%;
+}
+
+.footer-left {
+    width: 70%;
+    text-align: left;
+    font-size: 11px;
+    color: #666;
+}
+
+.footer-right {
+    width: 30%;
+    text-align: right;
+    font-size: 11px;
+    color: #666;
+}
